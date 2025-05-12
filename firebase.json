@@ -1,0 +1,32 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "project-skripsi-3fd45",
+          "appId": "1:657353234336:android:5802862c35f0a7b18ff6c5",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "project-skripsi-3fd45",
+          "configurations": {
+            "android": "1:657353234336:android:5802862c35f0a7b18ff6c5",
+            "ios": "1:657353234336:ios:e1df090ea6a22f5b8ff6c5",
+            "macos": "1:657353234336:ios:e1df090ea6a22f5b8ff6c5",
+            "web": "1:657353234336:web:f11a455409932a168ff6c5",
+            "windows": "1:657353234336:web:b3fddd495119d44a8ff6c5"
+          }
+        }
+      }
+    }
+  },
+  "database": {
+    "rules": "database.rules.json"
+  }
+}

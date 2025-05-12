@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "657353234336",
+    "project_id": "project-skripsi-3fd45",
+    "firebase_url": " https://project-skripsi-3fd45-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "storage_bucket": "project-skripsi-3fd45.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657353234336:android:5802862c35f0a7b18ff6c5",
+        "android_client_info": {
+          "package_name": "com.project_skripsi.project_skripsi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTaCp8qMbkC3-ImsAxbW6nRqfCmY0dH3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
