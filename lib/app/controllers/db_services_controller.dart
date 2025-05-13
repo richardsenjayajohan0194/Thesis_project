@@ -4,11 +4,11 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
+import 'package:project_skripsi/app/models/fetch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:time_listener/time_listener.dart';
 
 import '../models/data.dart';
-import '../models/fetch.dart';
 
 import '../models/user.dart';
 import '../routes/app_pages.dart';
@@ -97,18 +97,10 @@ class DbServicesController extends GetxController {
     print('Title : ${title} monthYear: ${mYear}');
 
     // Check if mYear is empty before parsing
-    if (mYear.isEmpty) {
-      mYear = "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}";
-    } else {
-      try {
-        DateTime dateTime = DateTime.parse(mYear);
-        mYear = "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}";
-      } catch (e) {
-        print('Error parsing mYear: $e');
-        // Handle the error, possibly set mYear to current year and month
-        mYear = "${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}";
-      }
-    }
+    if (mYear.isNotEmpty) {
+      DateTime dateTime = DateTime.parse(mYear);
+      mYear = "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+    } 
 
     var monthYear = mYear;
 
@@ -116,7 +108,7 @@ class DbServicesController extends GetxController {
     List<DataModel> dataModels = [];
     DataModel newDataModel;
 
-    print(mYear);
+    print("MYear : $mYear");
     var parts = mYear.split('-');
     int year = int.parse(parts[0]);
     int month = int.parse(parts[1]);
@@ -128,40 +120,31 @@ class DbServicesController extends GetxController {
     try {
       // Fetch the document from Firestore
       QuerySnapshot querySnapshot = await _fire
-          .collection('Datas')
-          .where(FieldPath.documentId, isEqualTo: monthYear)
+          .collection(monthYear)
           .get();
 
       // Check if any documents were returned
       if (querySnapshot.docs.isNotEmpty) {
-        for (var doc in querySnapshot.docs) {
-          print('Document ID: ${doc.id}, Data: ${doc.data()}');
 
-          // Ensure the data is a Map
-          if (doc.data() is Map<String, dynamic>) {
-            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        Map<String, dynamic> sepesificField = {
+          'data': querySnapshot.docs,
+        };
 
-            // Iterate through the outer map
-            for (var entry in data.entries) {
-              var key = entry.key;
-              var value = entry.value;
+        newDataModel = DataModel.fromMap(sepesificField);
 
-              // Ensure value is a Map
-              if (value is Map<String, dynamic>) {
-                // Check if title exists in the value map
-                if (value.containsKey(title)) {
-                  var titleValue = value[title].toDouble();
-                  print('Value for title ($title): $titleValue'); // Debugging line
+        print("Spesific field: ${newDataModel.dataList}");
 
-                  // Create a new DataModel instance with a list of data
-                  newDataModel = DataModel(dataList: [key, titleValue.toDouble()]);
+        if(newDataModel.dataList != null){
+          for(var time in newDataModel.dataList!){
+            var keyTime = time.id;
+            var value = time.data()[title];
+            print("key id: $keyTime, value data: ${value}");
 
-                  print("newDaraModel: ${newDataModel.totalMonth}");
-                  // Add the new instance to the list
-                  dataModels.add(newDataModel);
-                }
-              }
-            }
+            // Create a new DataModel instance with a list of data
+            newDataModel = DataModel(dataList: [keyTime, value.toDouble()]);
+
+            // Add the new instance to the list
+            dataModels.add(newDataModel);
           }
         }
       } else {
@@ -203,7 +186,7 @@ class DbServicesController extends GetxController {
               }
 
               if(key == "humidity"){
-                  newDataModel = DataModel(title: "Air Humidity", dataFetch: "humidity", image: "images/air_humidity.png", type: "%", interval: 10, maxValue: 100, dataList: [key, value.toDouble()]);
+                  newDataModel = DataModel(title: "Air Humidity", dataFetch: "hum_air", image: "images/air_humidity.png", type: "%", interval: 10, maxValue: 100, dataList: [key, value.toDouble()]);
                   // Add only if newDataModel is created
               } 
               if (newDataModel != null) {

@@ -25,6 +25,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  calendar_date_picker2:
+    dependency: "direct main"
+    description:
+      name: calendar_date_picker2
+      sha256: "293020a283210ccefff669499178c127acbb5e77ae13864f992c8a3e68a8aca1"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   characters:
     dependency: transitive
     description:
@@ -81,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  date_picker_plus:
+    dependency: "direct main"
+    description:
+      name: date_picker_plus
+      sha256: e2693c3514430cdc874d071dcb80a717385cb94206e8e458137c993b5c69d9a7
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.2.0"
   fake_async:
     dependency: transitive
     description:
@@ -248,22 +264,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.16.0"
-  month_picker_dialog:
-    dependency: "direct main"
-    description:
-      name: month_picker_dialog
-      sha256: "9a9a626907b0c54f1c7f4b68d27971f6df5c100411b79357161cd6a5629bfeac"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.0.3"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      sha256: "03bac4c528c64c95c722ec99280375a6f2fc708eec17c7b3f07253b626cd2a20"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -312,14 +312,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.8"
-  provider:
-    dependency: transitive
-    description:
-      name: provider
-      sha256: "489024f942069c2920c844ee18bb3d467c69e48955a4f32d1677f71be103e310"
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.4"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -425,10 +417,18 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_core
-      sha256: "720ea28f0ab8f8c19fc613c20b978e514c7e4e431171fd85ed8da528e01298e0"
+      sha256: "4fb16cf25fa56f787f3991bbdea6241512a81cdbfad4255452f3fd01b7d5fb25"
       url: "https://pub.dev"
     source: hosted
-    version: "29.1.39"
+    version: "29.1.41"
+  syncfusion_flutter_datepicker:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_datepicker
+      sha256: f415d3e5efb0852a3009a2555a01c73a071ac827326f73de9ca4b0ce22fdf4b1
+      url: "https://pub.dev"
+    source: hosted
+    version: "29.1.41"
   term_glyph:
     dependency: transitive
     description:
