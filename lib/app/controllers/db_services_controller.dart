@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
-import 'package:project_skripsi/app/models/fetch.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:time_listener/time_listener.dart';
 
@@ -93,7 +92,7 @@ class DbServicesController extends GetxController {
 
   
   //Fetch data Graph page
-  Future<FetchResult> FetchData(String title, String mYear) async {
+  Future<List<DataModel>> FetchData(String title, String mYear) async {
     print('Title : ${title} monthYear: ${mYear}');
 
     // Check if mYear is empty before parsing
@@ -107,15 +106,6 @@ class DbServicesController extends GetxController {
      // Initialize a list to hold DataModel instances
     List<DataModel> dataModels = [];
     DataModel newDataModel;
-
-    print("MYear : $mYear");
-    var parts = mYear.split('-');
-    int year = int.parse(parts[0]);
-    int month = int.parse(parts[1]);
-
-    DateTime lastDayOfMonth = new DateTime(year, month + 1, 0);
-
-    // newDataModel = DataModel(totalMonth: lastDayOfMonth.day.toDouble());
 
     try {
       // Fetch the document from Firestore
@@ -154,7 +144,7 @@ class DbServicesController extends GetxController {
       print('Error fetching data: $e');
     }
     print(dataModels);
-    return FetchResult(lastDayOfMonth.day.toDouble(),dataModels); // Return the list of DataModel instances
+    return dataModels; // Return the list of DataModel instances
   }
 
   //Fetch data for realtime data

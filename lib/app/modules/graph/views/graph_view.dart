@@ -7,7 +7,6 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../../utils/Widget/Mainlayout.dart';
 import '../../../controllers/db_services_controller.dart';
 import '../../../models/data.dart';
-import '../../../models/fetch.dart';
 
 class GraphView extends StatefulWidget {
   final DbServicesController find = Get.find<DbServicesController>();
@@ -25,7 +24,7 @@ class _GraphViewState extends State<GraphView> {
   Widget build(BuildContext context) {
     final DataModel dataModel = Get.arguments['data'];
 
-    String formattedDate = DateFormat.MMMM().format(selectedDate!);
+    String formattedDate = DateFormat('EEE, d MMM').format(selectedDate!);
 
     print(dataModel.image);
 
@@ -59,7 +58,7 @@ class _GraphViewState extends State<GraphView> {
               ),
             ),
             Container(
-              color: Color(0xFFFFFFFF),
+              // color: Color(0xFFFFFFFF),
               height: 350,
               child: SfDateRangePicker(
                 initialSelectedDate: DateTime.now(),
@@ -68,7 +67,7 @@ class _GraphViewState extends State<GraphView> {
                 selectionColor: Color(0xFF914F1E),
                 view: DateRangePickerView.month,
                 selectionMode: DateRangePickerSelectionMode.single,
-                backgroundColor: Color(0xFFFFFFFF),
+                backgroundColor: Color(0x80FFFFFF),
                 monthViewSettings: DateRangePickerMonthViewSettings(
                   dayFormat: 'EEE',
                     viewHeaderStyle: DateRangePickerViewHeaderStyle(
@@ -84,7 +83,7 @@ class _GraphViewState extends State<GraphView> {
                   todayTextStyle: TextStyle(color: Colors.black),
                 ),
                 headerStyle: DateRangePickerHeaderStyle(
-                  backgroundColor: Color(0xFFFFFFFF),
+                  backgroundColor: Color(0x1AFFFFFF),
                   textAlign: TextAlign.center,
                   textStyle: TextStyle(
                     fontSize: 17,
@@ -100,96 +99,112 @@ class _GraphViewState extends State<GraphView> {
                 },
               )
             ),
-            Container(
-              color: Color(0xFFFFFFFF),
-              height: MediaQuery.of(context).size.height * 0.4,
-              child: FutureBuilder<FetchResult>(
-                future: widget.find.FetchData(
-                  "${dataModel.dataFetch}",
-                  selectedDate != null ? selectedDate!.toIso8601String() : "",
+            Expanded(
+              child: Container(
+                color: Color(0xFFFFFFFF),
+                padding: EdgeInsets.symmetric(
+                  horizontal: MediaQuery.of(context).size.width * 0.03,
+                  vertical: MediaQuery.of(context).size.height * 0.01,
                 ),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.fetchData.isEmpty && snapshot.data!.totalDays > 0) {
-                    return Center(child: Text('No data available'));
-                  } else {
-                    List<ChartData> chartDataList = [];
-
-                    final datasModel = snapshot.data!;
-
-                    print("Total days in month: ${datasModel.totalDays}");
-
-
-                    for (var dataModel in datasModel.fetchData) {
-                      if (dataModel.dataList != null && dataModel.dataList!.isNotEmpty) {
-                        var xValue = dataModel.dataList![0];
-                        var yValue = dataModel.dataList![1];
-
-                        print("Data Key: $xValue, Data Value: $yValue");
-
-                        chartDataList.add(ChartData(xValue, yValue));
-                      }
-                    }
-
-
-                    return SfCartesianChart(
-                      primaryXAxis: CategoryAxis(
-                        labelRotation: -45,
-                        labelIntersectAction: AxisLabelIntersectAction.rotate45,
-                        minimum: 0,
-                        // maximum: datasModel.totalDays,
-                        // interval: 5,
-                        initialZoomFactor: 0.3,
-                      ),
-                      primaryYAxis: NumericAxis(
-                        minimum: 0,
-                        maximum: dataModel.maxValue, // Ensure dataModel is defined
-                        interval: dataModel.interval, // Ensure dataModel is defined
-                        labelFormat: '{value}${dataModel.type ?? ""}'
-                      ),
-                      legend: Legend(
-                        isVisible: true,
-                        position: LegendPosition.bottom,
-                        title: LegendTitle(
-                            text:'Days',
-                            textStyle: TextStyle(
-                            color: Color(0xFF914F1E),
-                            fontSize: 15,
-                            fontFamily: "Livvic",
-                            fontWeight: FontWeight.w900
-                          )
+                child: Column(
+                  children: [
+                    Container(
+                      // color: Colors.blue,
+                      width: MediaQuery.sizeOf(context).width,
+                      child: Text(formattedDate,),
+                    ),
+                    SizedBox(height: MediaQuery.sizeOf(context).height * 0.02,),
+                    Container(
+                      // color: Color(0xFFFFFFFF),
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      child: FutureBuilder<List<DataModel>>(
+                        future: widget.find.FetchData(
+                          "${dataModel.dataFetch}",
+                          selectedDate != null ? selectedDate!.toIso8601String() : "",
                         ),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(child: Text('Error: ${snapshot.error}'));
+                          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                            return Center(child: Text('No data available'));
+                          } else {
+                            List<ChartData> chartDataList = [];
+              
+                            final datasModel = snapshot.data!;
+              
+                            for (var dataModel in datasModel) {
+                              if (dataModel.dataList != null && dataModel.dataList!.isNotEmpty) {
+                                var xValue = dataModel.dataList![0];
+                                var yValue = dataModel.dataList![1];
+              
+                                print("Data Key: $xValue, Data Value: $yValue");
+              
+                                chartDataList.add(ChartData(xValue, yValue));
+                              }
+                            }
+              
+              
+                            return SfCartesianChart(
+                              primaryXAxis: CategoryAxis(
+                                labelRotation: -45,
+                                labelIntersectAction: AxisLabelIntersectAction.rotate45,
+                                minimum: 0,
+                                // maximum: datasModel.totalDays,
+                                // interval: 5,
+                                initialZoomFactor: 1,
+                              ),
+                              primaryYAxis: NumericAxis(
+                                minimum: 0,
+                                maximum: dataModel.maxValue, // Ensure dataModel is defined
+                                interval: dataModel.interval, // Ensure dataModel is defined
+                                labelFormat: '{value}${dataModel.type ?? ""}'
+                              ),
+                              legend: Legend(
+                                isVisible: true,
+                                position: LegendPosition.bottom,
+                                title: LegendTitle(
+                                    text:'Times',
+                                    textStyle: TextStyle(
+                                    color: Color(0xFF914F1E),
+                                    fontSize: 15,
+                                    fontFamily: "Livvic",
+                                    fontWeight: FontWeight.w900
+                                  )
+                                ),
+                              ),
+                              zoomPanBehavior: ZoomPanBehavior(
+                                enablePinching: true,
+                                zoomMode: ZoomMode.x,
+                                enablePanning: true,
+                                // Define zoom levels
+                              ),
+                              tooltipBehavior: TooltipBehavior(
+                                enable: true,
+                                format: 'point.x: point.y',
+                                color: Color(0xFFB99470),
+                              ),
+                              series: <CartesianSeries<ChartData, String>>[
+                                LineSeries<ChartData, String>(
+                                  isVisibleInLegend: false,
+                                  dataSource: chartDataList,
+                                  xValueMapper: (ChartData data, _) => data.x,
+                                  yValueMapper: (ChartData data, _) => data.y,
+                                  name: "${dataModel.title}", // Ensure dataModel is defined
+                                  color: Color(0xFFC0C78C),
+                                  markerSettings: MarkerSettings(
+                                      isVisible: true
+                                  )
+                                ),
+                              ],
+                            );
+                          }
+                        },
                       ),
-                      zoomPanBehavior: ZoomPanBehavior(
-                        enablePinching: true,
-                        zoomMode: ZoomMode.x,
-                        enablePanning: true,
-                        // Define zoom levels
-                      ),
-                      tooltipBehavior: TooltipBehavior(
-                        enable: true,
-                        format: 'point.x: point.y',
-                        color: Color(0xFFB99470),
-                      ),
-                      series: <CartesianSeries<ChartData, String>>[
-                        LineSeries<ChartData, String>(
-                          isVisibleInLegend: false,
-                          dataSource: chartDataList,
-                          xValueMapper: (ChartData data, _) => data.x,
-                          yValueMapper: (ChartData data, _) => data.y,
-                          name: "${dataModel.title}", // Ensure dataModel is defined
-                          color: Color(0xFFC0C78C),
-                          markerSettings: MarkerSettings(
-                              isVisible: true
-                          )
-                        ),
-                      ],
-                    );
-                  }
-                },
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
