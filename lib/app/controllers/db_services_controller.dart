@@ -176,7 +176,12 @@ class DbServicesController extends GetxController {
               }
 
               if(key == "humidity"){
-                  newDataModel = DataModel(title: "Air Humidity", dataFetch: "hum_air", image: "images/air_humidity.png", type: "%", interval: 10, maxValue: 100, dataList: [key, value.toDouble()]);
+                  newDataModel = DataModel(title: "Air Humidity", dataFetch: "humidity", image: "images/air_humidity.png", type: "%", interval: 10, maxValue: 100, dataList: [key, value.toDouble()]);
+                  // Add only if newDataModel is created
+              } 
+
+              if(key == "moist"){
+                  newDataModel = DataModel(title: "Soil Moisture", dataFetch: "moist", image: "images/moisture.png", type: "%", interval: 10, maxValue: 100, dataList: [key, value.toDouble()]);
                   // Add only if newDataModel is created
               } 
               if (newDataModel != null) {

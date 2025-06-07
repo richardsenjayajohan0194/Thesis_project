@@ -153,7 +153,7 @@ class _GraphViewState extends State<GraphView> {
                                 minimum: 0,
                                 // maximum: datasModel.totalDays,
                                 // interval: 5,
-                                initialZoomFactor: 1,
+                                initialZoomFactor: 0.1,
                               ),
                               primaryYAxis: NumericAxis(
                                 minimum: 0,
