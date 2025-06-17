@@ -3,5 +3,6 @@
         "Mainlayout",
         "persistance"
     ],
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "cmake.sourceDirectory": "C:/LAB MP/Flutter Mobile App/project_skripsi/windows/flutter"
 }

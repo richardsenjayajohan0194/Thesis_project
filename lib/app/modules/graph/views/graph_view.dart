@@ -59,7 +59,7 @@ class _GraphViewState extends State<GraphView> {
             ),
             Container(
               // color: Color(0xFFFFFFFF),
-              height: 350,
+              height: 330,
               child: SfDateRangePicker(
                 initialSelectedDate: DateTime.now(),
                 headerHeight: MediaQuery.sizeOf(context).height * 0.05,
@@ -193,9 +193,9 @@ class _GraphViewState extends State<GraphView> {
                                   yValueMapper: (ChartData data, _) => data.y,
                                   name: "${dataModel.title}", // Ensure dataModel is defined
                                   color: Color(0xFFC0C78C),
-                                  markerSettings: MarkerSettings(
-                                      isVisible: true
-                                  )
+                                  // markerSettings: MarkerSettings(
+                                  //     isVisible: true
+                                  // )
                                 ),
                               ],
                             );

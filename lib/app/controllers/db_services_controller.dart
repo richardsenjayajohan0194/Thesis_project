@@ -90,7 +90,6 @@ class DbServicesController extends GetxController {
   }
   //End User
 
-  
   //Fetch data Graph page
   Future<List<DataModel>> FetchData(String title, String mYear) async {
     print('Title : ${title} monthYear: ${mYear}');
@@ -145,6 +144,23 @@ class DbServicesController extends GetxController {
     }
     print(dataModels);
     return dataModels; // Return the list of DataModel instances
+  }
+
+  Stream<String> getFeederEmpty() async* {
+     DatabaseReference postRef = FirebaseDatabase.instance.ref();
+
+    await for(var event in postRef.onValue){
+      final dataSnapshot = event.snapshot;
+      if(dataSnapshot.exists){
+        final data = dataSnapshot.value is Map;
+        print("data feeder: $data");
+        if(data == true){
+          yield "The feeder is Empty Please fill again";
+        }
+      }
+    }
+
+    
   }
 
   //Fetch data for realtime data

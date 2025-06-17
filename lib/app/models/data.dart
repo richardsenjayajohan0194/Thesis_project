@@ -45,8 +45,8 @@ class DataModel {
     print("User  data cleared: $dataList");
   }
 
-  void clearFilter(){
-    dataList = null;
-    print("User  data cleared: $dataList");
-  }
+  // void clearFilter(){
+  //   dataList = null;
+  //   print("User  data cleared: $dataList");
+  // }
 }

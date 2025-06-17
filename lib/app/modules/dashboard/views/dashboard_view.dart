@@ -7,9 +7,11 @@ import '../../graph/views/graph_view.dart';
 import '../controllers/dashboard_controller.dart';
 import '/app/controllers/db_services_controller.dart';
 import '/app/models/user.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class DashboardView extends GetView<DashboardController> {
   final DbServicesController auth = Get.find<DbServicesController>();
+   bool _dialogShown = false;
 
   DashboardView({super.key});
 
@@ -108,11 +110,46 @@ class DashboardView extends GetView<DashboardController> {
                 thickness: 4,
                 endIndent: 0,
               ),
+              Container(
+                child: StreamBuilder<String>(
+                  stream: auth.getFeederEmpty(), 
+                  builder: (context, snapshot){
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Center(child: Text('No data available.'));
+                      } else {
+                        final data = snapshot.data!;
+                        if (!_dialogShown) {
+                          _dialogShown = true; // Set the flag to true
+                          // Show the dialog
+                          Future.delayed(Duration.zero, () {
+                            AwesomeDialog(
+                              context: context,
+                              dialogType: DialogType.info,
+                              animType: AnimType.rightSlide,
+                              title: "Alert",
+                              desc: data,
+                              btnCancelOnPress: () {},
+                              btnOkOnPress: () {
+                                // Reset the dialog shown flag if needed
+                                _dialogShown = false;
+                              },
+                            )..show();
+                          });
+                        }
+                        return Container();
+                    }
+                  }
+                ),
+              ),
               // Real-time clock using StreamBuilder
               Flexible(
                 child: Container(
                   // color: Colors.greenAccent,
-                  height: MediaQuery.of(context).size.height * 0.54,
+                  height: MediaQuery.of(context).size.height * 0.7,
                   child: StreamBuilder<List<DataModel>>(
                     stream: auth.fetchDataStream(),
                     builder: (context, snapshot) {
@@ -317,7 +354,7 @@ class DashboardView extends GetView<DashboardController> {
                   }
                 }
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.12),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
